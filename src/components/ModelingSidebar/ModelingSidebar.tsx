@@ -13,7 +13,7 @@ import Tooltip from 'components/Tooltip'
 import { ActionIcon } from 'components/ActionIcon'
 import styles from './ModelingSidebar.module.css'
 import { ModelingPane } from './ModelingPane'
-import { isTauri } from 'lib/isTauri'
+import { isDesktop } from 'lib/isDesktop'
 import { useModelingContext } from 'hooks/useModelingContext'
 
 interface ModelingSidebarProps {
@@ -130,7 +130,7 @@ function ModelingSidebarSection({
   ).filter(
     (pane) =>
       !pane.hideOnPlatform ||
-      (isTauri()
+      (isDesktop()
         ? pane.hideOnPlatform === 'web'
         : pane.hideOnPlatform === 'desktop')
   )
