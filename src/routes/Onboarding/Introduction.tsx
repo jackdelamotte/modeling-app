@@ -17,7 +17,7 @@ import {
   ONBOARDING_PROJECT_NAME,
   PROJECT_ENTRYPOINT,
 } from 'lib/constants'
-import { createNewProjectDirectory, listProjects } from 'lib/tauri'
+import { createNewProjectDirectory, listProjects } from 'lib/desktop'
 
 function OnboardingWithNewFile() {
   const navigate = useNavigate()
