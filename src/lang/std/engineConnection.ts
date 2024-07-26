@@ -1,4 +1,5 @@
 import { Program, SourceRange } from 'lang/wasm'
+import { deserialize_files } from 'wasm-lib/pkg/wasm_lib'
 import { VITE_KC_API_WS_MODELING_URL } from 'env'
 import { Models } from '@kittycad/lib'
 import { exportSave } from 'lib/exportSave'
@@ -1381,9 +1382,24 @@ export class EngineCommandManager extends EventTarget {
           // because in all other cases we send JSON strings. But in the case of
           // export we send a binary blob.
           // Pass this to our export function.
-          exportSave(event.data).then(() => {
-            this.pendingExport?.resolve(null)
-          }, this.pendingExport?.reject)
+          //exportSave(event.data).then(() => {
+          //  this.pendingExport?.resolve(null)
+          //}, this.pendingExport?.reject)
+          const formData = new FormData()
+          formData.append("params", '{"printer_id":"CZPX2418X004XK68718"}')
+  	  let files: ModelingAppFile[] = deserialize_files(new Uint8Array(event.data))
+	  let file = files[0]
+          const fileBlob = new Blob([new Uint8Array(file.contents)], { type: "text/plain" })
+          formData.append("file", fileBlob, file.name)
+
+          const response = fetch("http://0.0.0.0:8585/print", {
+            mode: 'no-cors',
+            method: "POST",
+	    body: formData,
+	  }).then(() => {
+          	//console.log(await response.json());
+          	this.pendingExport?.resolve(null)
+	  }, this.pendingExport?.reject)
           return
         }
 

@@ -207,6 +207,7 @@ export type ModelingMachineEvent =
   | { type: 'Constrain remove constraints'; data?: PathToNode }
   | { type: 'Re-execute' }
   | { type: 'Export'; data: ModelingCommandSchema['Export'] }
+  | { type: 'Print'; data: ModelingCommandSchema['Print'] }
   | { type: 'Extrude'; data?: ModelingCommandSchema['Extrude'] }
   | { type: 'Fillet'; data?: ModelingCommandSchema['Fillet'] }
   | {
@@ -331,6 +332,13 @@ export const modelingMachine = createMachine(
             internal: true,
             cond: 'Has exportable geometry',
             actions: 'Engine export',
+          },
+
+          Print: {
+            target: 'idle',
+            internal: true,
+            cond: 'Has exportable geometry',
+            actions: 'Print',
           },
 
           'Delete selection': {

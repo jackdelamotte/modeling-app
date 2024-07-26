@@ -337,6 +337,37 @@ export const ModelingMachineProvider = ({
 
           return {}
         }),
+        'Print': async (_, event) => {
+          if (event.type !== 'Print' || TEST) return
+          console.log('printing', event.data)
+  	  const format = {
+	    type: 'stl',
+            coords: {
+              forward: {
+                axis: 'y',
+                direction: 'negative',
+              },
+              up: {
+                axis: 'z',
+                direction: 'positive',
+              },
+            },
+	    storage: 'ascii',
+            units: defaultUnit.current,
+            selection: { type: 'default_scene' },
+	  }
+
+          toast.promise(
+            exportFromEngine({
+              format: format
+            }),
+            {
+              loading: 'Starting print...',
+              success: 'Started print successfully',
+              error: 'Error while starting print',
+            }
+          )
+	},
         'Engine export': async (_, event) => {
           if (event.type !== 'Export' || TEST) return
           console.log('exporting', event.data)

@@ -22,6 +22,7 @@ export type ModelingCommandSchema = {
     type: OutputTypeKey
     storage?: StorageUnion
   }
+  Print: {}
   Extrude: {
     selection: Selections // & { type: 'face' } would be cool to lock that down
     // result: (typeof EXTRUSION_RESULTS)[number]
@@ -158,6 +159,13 @@ export const modelingMachineCommandConfig: StateMachineCommandSetConfig<
           }
         },
       },
+    },
+  },
+  Print: {
+    description: 'Print',
+    icon: 'print',
+    needsReview: true,
+    args: {
     },
   },
   Extrude: {

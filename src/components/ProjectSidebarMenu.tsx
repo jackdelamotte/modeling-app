@@ -90,6 +90,7 @@ function ProjectMenuPopover({
   const { commandBarState, commandBarSend } = useCommandsContext()
   const { onProjectClose } = useLspContext()
   const exportCommandInfo = { name: 'Export', groupId: 'modeling' }
+  const printCommandInfo = { name: 'Print', groupId: 'modeling' }
   const findCommand = (obj: { name: string; groupId: string }) =>
     Boolean(
       commandBarState.context.commands.find(
@@ -141,6 +142,30 @@ function ProjectMenuPopover({
             commandBarSend({
               type: 'Find and select command',
               data: exportCommandInfo,
+            }),
+        },
+        'break',
+        {
+          id: 'print',
+          Element: 'button',
+          children: (
+            <>
+              <span>Print current part</span>
+              {!findCommand(printCommandInfo) && (
+                <Tooltip
+                  position="right"
+                  wrapperClassName="!max-w-none min-w-fit"
+                >
+                  Awaiting engine connection
+                </Tooltip>
+              )}
+            </>
+          ),
+          disabled: !findCommand(printCommandInfo),
+          onClick: () =>
+            commandBarSend({
+              type: 'Find and select command',
+              data: printCommandInfo,
             }),
         },
         'break',
